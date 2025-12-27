@@ -67,7 +67,7 @@ script:
                 border_color: $highlight_color
                 border_width: 2
                 border_opa: 100%
-                radius: 25px
+                radius: 12px
             - lvgl.widget.update:
                 id: ${zone_prefix}_label_button_http
                 text_color: $label_on_color
@@ -81,7 +81,7 @@ script:
                       border_color: $highlight_color
                       border_width: 2
                       border_opa: 100%
-                      radius: 25px
+                      radius: 12px
                   - lvgl.widget.update:
                       id: ${zone_prefix}_label_button_http_2
                       text_color: $label_on_color
@@ -95,7 +95,7 @@ script:
                             border_color: $highlight_color
                             border_width: 2
                             border_opa: 100%
-                            radius: 25px
+                            radius: 12px
                         - lvgl.widget.update:
                             id: ${zone_prefix}_label_button_http_3
                             text_color: $label_on_color
@@ -109,7 +109,7 @@ script:
                                   border_color: $highlight_color
                                   border_width: 2
                                   border_opa: 100%
-                                  radius: 25px
+                                  radius: 12px
                               - lvgl.widget.update:
                                   id: ${zone_prefix}_label_button_http_4
                                   text_color: $label_on_color
@@ -123,7 +123,7 @@ script:
                                         border_color: $highlight_color
                                         border_width: 2
                                         border_opa: 100%
-                                        radius: 25px
+                                        radius: 12px
                                     - lvgl.widget.update:
                                         id: ${zone_prefix}_label_button_http_5
                                         text_color: $label_on_color
@@ -137,7 +137,7 @@ script:
                                               border_color: $highlight_color
                                               border_width: 2
                                               border_opa: 100%
-                                              radius: 25px
+                                              radius: 12px
                                           - lvgl.widget.update:
                                               id: ${zone_prefix}_label_button_http_6
                                               text_color: $label_on_color
@@ -203,4 +203,4 @@ image:
         resize: 64x64
       - file: 'assets/optimal_audio_home_black.svg'
         id: zone_audio_icon
-        resize: 48x48
+        resize: 64x64
