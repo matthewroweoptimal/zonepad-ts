@@ -1,0 +1,683 @@
+# Substitution variables used through the codebase
+substitutions:
+  icon_font: mdi_icons_40
+  text_font: nunito_20
+  text_color: white
+  bg_color: black
+  button_on_color: "ep_orange"
+  button_off_color: "0x34394B"
+  icon_on_color: "0xD2D2D2"
+  icon_off_color: "gray"
+  label_on_color: "0xD2D2D2"
+  label_off_color: "gray"
+  button_text_color: "white"
+  highlight_color: "0x6177B4" # web-ui highlight color
+  slider_colour: "0xD2D2D2"
+  slider_back_color: "0x34394B"
+  slider_icon_color: "0x454851"
+  touchscreen_idle_timeout: "30s"
+  touchscreen_daytime_brightness: "100%"
+  touchscreen_nighttime_brightness: "50%"
+  # Boot screen configuration
+  boot_screen_delay: 60s
+
+  # LCD backlight modes - Code in backlight.yaml
+  # Day mode is set to Sunrise
+  # Evening mode is set to sunset
+  # Set Night mode  at Mightnight here
+  screen_night_hour: '0'
+  screen_night_minute: '0'
+
+  # Screen Size
+  screen_height: '480'
+  screen_width: '480'
+
+esphome:
+  name: "guition-4848s040"
+  friendly_name: "Guition 4848s040"
+  comment: "Guition ESP32-S3-4848S040 480px * 480px Smart Screen"
+  includes:
+    - http_client_helper.h
+  on_boot:
+    - priority: 400
+      then:
+        - script.execute: update_loading_page
+
+logger:
+  level: debug
+
+http_request:
+  useragent: lvgl-panel
+  timeout: 3s
+
+# Time update script - This is run once per second. Use it to update any time related labels.
+script:
+  - id: time_update
+    then:
+        # The format %I:%M %p will display the time in a 12-hour format with "am" or "pm" included  
+      - lvgl.label.update:
+          id: time_label
+          text: !lambda 'return id(system_time).now().strftime("%l:%M %P");'    
+  - id: update_zone_source_buttons
+    parameters:
+      source_val: int
+    then:
+      # Clear existing outlines/labels, then highlight matching value
+      - lvgl.widget.update:
+          id: button_http
+          outline_width: 0
+      - lvgl.widget.update:
+          id: label_button_http
+          text_color: $label_off_color
+      - lvgl.widget.update:
+          id: button_http_2
+          outline_width: 0
+      - lvgl.widget.update:
+          id: label_button_http_2
+          text_color: $label_off_color
+      - lvgl.widget.update:
+          id: button_http_3
+          outline_width: 0
+      - lvgl.widget.update:
+          id: label_button_http_3
+          text_color: $label_off_color
+      - lvgl.widget.update:
+          id: button_http_4
+          outline_width: 0
+      - lvgl.widget.update:
+          id: label_button_http_4
+          text_color: $label_off_color
+      - lvgl.widget.update:
+          id: button_http_5
+          outline_width: 0
+      - lvgl.widget.update:
+          id: label_button_http_5
+          text_color: $label_off_color
+      - lvgl.widget.update:
+          id: button_http_6
+          outline_width: 0
+      - lvgl.widget.update:
+          id: label_button_http_6
+          text_color: $label_off_color
+      - if:
+          condition:
+            lambda: 'return source_val == 2;'
+          then:
+            - lvgl.widget.update:
+                id: button_http
+                outline_color: $highlight_color
+                outline_width: 2
+                radius: 25px
+            - lvgl.widget.update:
+                id: label_button_http
+                text_color: $label_on_color
+          else:
+            - if:
+                condition:
+                  lambda: 'return source_val == 3;'
+                then:
+                  - lvgl.widget.update:
+                      id: button_http_2
+                      outline_color: $highlight_color
+                      outline_width: 2
+                      radius: 25px
+                  - lvgl.widget.update:
+                      id: label_button_http_2
+                      text_color: $label_on_color
+                else:
+                  - if:
+                      condition:
+                        lambda: 'return source_val == 4;'
+                      then:
+                        - lvgl.widget.update:
+                            id: button_http_3
+                            outline_color: $highlight_color
+                            outline_width: 2
+                            radius: 25px
+                        - lvgl.widget.update:
+                            id: label_button_http_3
+                            text_color: $label_on_color
+                      else:
+                        - if:
+                            condition:
+                              lambda: 'return source_val == 5;'
+                            then:
+                              - lvgl.widget.update:
+                                  id: button_http_4
+                                  outline_color: $highlight_color
+                                  outline_width: 2
+                                  radius: 25px
+                              - lvgl.widget.update:
+                                  id: label_button_http_4
+                                  text_color: $label_on_color
+                            else:
+                              - if:
+                                  condition:
+                                    lambda: 'return source_val == 6;'
+                                  then:
+                                    - lvgl.widget.update:
+                                        id: button_http_5
+                                        outline_color: $highlight_color
+                                        outline_width: 2
+                                        radius: 25px
+                                    - lvgl.widget.update:
+                                        id: label_button_http_5
+                                        text_color: $label_on_color
+                                  else:
+                                    - if:
+                                        condition:
+                                          lambda: 'return source_val == 7;'
+                                        then:
+                                          - lvgl.widget.update:
+                                              id: button_http_6
+                                              outline_color: $highlight_color
+                                              outline_width: 2
+                                              radius: 25px
+                                          - lvgl.widget.update:
+                                              id: label_button_http_6
+                                              text_color: $label_on_color
+  - id: update_zone_levels
+    parameters:
+      music_val: int
+      sysmic_val: int
+    then:
+      - if:
+          condition:
+            lambda: 'return music_val >= 0;'
+          then:
+            - lvgl.slider.update:
+                id: music_level_slider
+                value: !lambda 'return music_val;'
+      - if:
+          condition:
+            lambda: 'return sysmic_val >= 0;'
+          then:
+            - lvgl.slider.update:
+                id: sysmic_level_slider
+                value: !lambda 'return sysmic_val;'
+  - id: poll_zone_source
+    then:
+      - if:
+          condition:
+            wifi.connected:
+          then:
+            - lambda: |-
+                int value = -1;
+                int status = oa_http::fetch_source_value(value);
+                ESP_LOGD("zone_poll", "Status: %d, value: %d", status, value);
+                if (status == 200 && value > 0) {
+                  id(update_zone_source_buttons).execute(value);
+                } else {
+                  ESP_LOGW("zone_poll", "Polling skipped highlight, status=%d value=%d", status, value);
+                }
+  - id: poll_zone_levels
+    then:
+      - if:
+          condition:
+            wifi.connected:
+          then:
+            - lambda: |-
+                int music_val = -1;
+                int mic_val = -1;
+                int status_music = oa_http::fetch_param_value("musiclevel", music_val);
+                int status_mic = oa_http::fetch_param_value("sysmic1level", mic_val);
+                ESP_LOGD("zone_level", "music status=%d val=%d, mic status=%d val=%d", status_music, music_val, status_mic, mic_val);
+                id(update_zone_levels).execute(music_val, mic_val);
+
+image:
+  rgb565:
+    alpha_channel:
+      - file: 'assets/optimal_audio_home.svg'
+        id: optimal_audio_icon
+        resize: 96x96
+      - file: 'assets/music.svg'
+        id: music_icon
+        resize: 64x64
+      - file: 'assets/mic.svg'
+        id: mic_icon
+        resize: 64x64
+
+interval:
+  - interval: 500ms
+    then:
+      - if:
+          condition:
+            lambda: |-
+              auto *cur = lv_scr_act();
+              return esphome::network::is_connected() && cur != nullptr && cur == id(zone_page).obj;
+          then:
+            - script.execute: poll_zone_source
+            - script.execute: poll_zone_levels
+          
+packages:
+  # Generic configuration for ESP32 screens
+  # SDL has no Wi-Fi
+  wifi: !include esphome-modular-lvgl-buttons/common/wifi.yaml
+  # Enable OTA updates with a status screen
+  ota_screen: !include esphome-modular-lvgl-buttons/common/ota.yaml
+  # All the colors
+  colors: !include esphome-modular-lvgl-buttons/common/color.yaml
+  # Some nice basic fonts
+  fonts: !include esphome-modular-lvgl-buttons/common/fonts.yaml
+  # 1000s of glyphs
+  glyphs: !include esphome-modular-lvgl-buttons/common/mdi_glyph_substitutions.yaml
+  # Some basic sensors
+  sensors: !include esphome-modular-lvgl-buttons/sensors/sensors_base.yaml
+  # Styles + Themes
+  theme_style: !include esphome-modular-lvgl-buttons/common/theme_style.yaml
+  # Use this theme for debugging
+  # theme_style: !include esphome-modular-lvgl-buttons/common/theme_style_debug.yaml
+  # Include if your touch screen has a backlight. Also sets the time from HA
+  backlight: !include esphome-modular-lvgl-buttons/common/backlignt_time.yaml
+
+  # Harware description file
+  hardware: !include esphome-modular-lvgl-buttons/hardware/guition-esp32-s3-4848s040.yaml
+  
+  # Basic boot screen with ESPHome logo and device diagnostic info
+  loading_screen: !include esphome-modular-lvgl-buttons/pages/loading_480px.yaml
+  # info screen - WiFi login, IP address, MAC address etc
+  info_screen: !include esphome-modular-lvgl-buttons/pages/info.yaml
+
+  # This section will add buttons and page to your screen using the ESPHome package system. 
+  # Each package has all the code required for the button or page (LVGL, sensors, etc)
+
+  # Add a button the controls a light in HA  
+  button_1: !include
+    file: esphome-modular-lvgl-buttons/buttons/switch_button.yaml
+    vars:
+      uid: button_1
+      row: 0
+      column: 0
+      text: Light
+      icon: $mdi_lightbulb
+      entity_id: "switch.athom_smart_plug_v3_50ebc0_switch"
+
+  # Add a button that displays the time
+  button_2: !include
+    file: esphome-modular-lvgl-buttons/buttons/time_button.yaml
+    vars:
+      uid: button_2
+      row: 0
+      column: 3
+      text: 00:00
+      click_page: info_screen
+      
+  # Add a button that goes to a different page
+  button_3: !include
+    file: esphome-modular-lvgl-buttons/buttons/page_button.yaml
+    vars:
+      uid: button_3
+      row: 1
+      column: 0
+      text: Info screen
+      icon: $mdi_information_box
+      click_page: info_screen      
+
+  # Add a dimmer light
+  button_4: !include
+    file: esphome-modular-lvgl-buttons/buttons/dimmer_light_button.yaml
+    vars:
+      uid: button_4
+      row: 2
+      column: 0
+      row_span: 2 # optional make a button bigger then one cell
+      text: RGB light
+      icon: $mdi_string_lights
+      entity_id: light.athom_rgb_light_d93662_rgb_light_strip
+
+  # Add a button that navigates to a new custom page
+  # Home screen link to Zone page with Optimal Audio logo
+  button_5:
+    lvgl:
+      pages:
+        - id: !extend main_page
+          widgets:
+            - container:
+                id: button_5
+                grid_cell_row_pos: 0
+                grid_cell_column_pos: 1
+                grid_cell_row_span: 1
+                grid_cell_column_span: 1
+                grid_cell_x_align: stretch
+                grid_cell_y_align: stretch
+                widgets:
+                  - button:
+                      id: button_button_5
+                      bg_opa: TRANSP
+                      shadow_opa: TRANSP
+                      border_width: 0
+                      on_short_click:
+                        - lvgl.page.show: zone_page
+                      widgets:
+                        - image:
+                            src: optimal_audio_icon
+                            align: center
+                            width: 56
+                            height: 56
+
+  button_4_page: !include
+    file: esphome-modular-lvgl-buttons/pages/light_color.yaml
+    vars:
+      light_entity: "light.athom_rgb_light_d93662_rgb_light_strip"
+      widget_name: "button_4"
+
+# This is the main LVGL section. We start with a simple 4x4 grid.
+lvgl:
+  pages:
+    - id: main_page
+      layout: 4x4
+      styles: page_style
+      <<: !include esphome-modular-lvgl-buttons/widgets/swipe_navigation.yaml
+      widgets:
+          # You can use the package section above to add prebuilt button types or build your own custom button from scratch here.
+          - container:
+              id: button_12
+              grid_cell_x_align: stretch
+              grid_cell_y_align: stretch
+              grid_cell_row_pos: 3
+              grid_cell_column_pos: 3
+              grid_cell_row_span: 1
+              grid_cell_column_span: 1
+              outline_width: 1   # debug code - This is for visualizing boundries remove for production
+              outline_color: red # debug code - This is for visualizing boundries remove for production
+              widgets:
+                - label:
+                    text_font: $text_font
+                    align: center
+                    text_color: white
+                    text: "Cell 3,3"
+    - id: zone_page
+      layout: 4x4
+      styles: page_style
+      <<: !include esphome-modular-lvgl-buttons/widgets/swipe_navigation.yaml
+      widgets:
+          - container:
+              id: zone_logo
+              grid_cell_x_align: stretch
+              grid_cell_y_align: stretch
+              grid_cell_row_pos: 0
+              grid_cell_column_pos: 0
+              grid_cell_row_span: 1
+              grid_cell_column_span: 1
+              widgets:
+                - button:
+                    id: optimal_audio_button
+                    bg_opa: TRANSP
+                    shadow_opa: TRANSP
+                    border_width: 0
+                    on_short_click:
+                      - lvgl.page.show: main_page
+                    widgets:
+                      - image:
+                          id: optimal_audio_image
+                          align: center
+                          src: optimal_audio_icon
+                          width: 60%
+                          height: 60%
+          - label:
+              text: "Zone 1"
+              text_font: nunito_24
+              text_color: $slider_colour
+              grid_cell_row_pos: 0
+              grid_cell_column_pos: 1
+              grid_cell_column_span: 2
+              grid_cell_x_align: center
+              grid_cell_y_align: center
+          # Mirror main grid sizing for consistency
+          - container:
+              id: zone_input_1
+              grid_cell_x_align: stretch
+              grid_cell_y_align: stretch
+              grid_cell_row_pos: 1
+              grid_cell_column_pos: 2
+              grid_cell_row_span: 1
+              grid_cell_column_span: 1
+              widgets:
+                - button:
+                    id: button_http
+                    widgets:
+                      - label:
+                          align: center
+                          text_font: $text_font
+                          text_color: gray
+                          id: label_button_http
+                          text: "Input 1"
+                    on_short_click:
+                      then:
+                        - http_request.get:
+                            url: "http://optimalaudio.local/api/set?zone=1&source=2"
+                        - logger.log: "Sent HTTP request to set zone 1 source"
+          - container:
+              id: zone_input_2
+              grid_cell_x_align: stretch
+              grid_cell_y_align: stretch
+              grid_cell_row_pos: 2
+              grid_cell_column_pos: 2
+              grid_cell_row_span: 1
+              grid_cell_column_span: 1
+              widgets:
+                - button:
+                    id: button_http_2
+                    widgets:
+                      - label:
+                          align: center
+                          text_font: $text_font
+                          text_color: gray
+                          id: label_button_http_2
+                          text: "Input 2"
+                    on_short_click:
+                      then:
+                        - http_request.get:
+                            url: "http://optimalaudio.local/api/set?zone=1&source=3"
+                        - logger.log: "Sent HTTP request to set zone 1 source 2"
+          - container:
+              id: zone_input_3
+              grid_cell_x_align: stretch
+              grid_cell_y_align: stretch
+              grid_cell_row_pos: 3
+              grid_cell_column_pos: 2
+              grid_cell_row_span: 1
+              grid_cell_column_span: 1
+              widgets:
+                - button:
+                    id: button_http_3
+                    widgets:
+                      - label:
+                          align: center
+                          text_font: $text_font
+                          text_color: gray
+                          id: label_button_http_3
+                          text: "Input 3"
+                    on_short_click:
+                      then:
+                        - http_request.get:
+                            url: "http://optimalaudio.local/api/set?zone=1&source=4"
+                        - logger.log: "Sent HTTP request to set zone 1 source 3"
+          - container:
+              id: zone_input_4
+              grid_cell_x_align: stretch
+              grid_cell_y_align: stretch
+              grid_cell_row_pos: 1
+              grid_cell_column_pos: 3
+              grid_cell_row_span: 1
+              grid_cell_column_span: 1
+              widgets:
+                - button:
+                    id: button_http_4
+                    widgets:
+                      - label:
+                          align: center
+                          text_font: $text_font
+                          text_color: gray
+                          id: label_button_http_4
+                          text: "Input 4"
+                    on_short_click:
+                      then:
+                        - http_request.get:
+                            url: "http://optimalaudio.local/api/set?zone=1&source=5"
+                        - logger.log: "Sent HTTP request to set zone 1 source 4"
+          - container:
+              id: zone_input_5
+              grid_cell_x_align: stretch
+              grid_cell_y_align: stretch
+              grid_cell_row_pos: 2
+              grid_cell_column_pos: 3
+              grid_cell_row_span: 1
+              grid_cell_column_span: 1
+              widgets:
+                - button:
+                    id: button_http_5
+                    widgets:
+                      - label:
+                          align: center
+                          text_font: $text_font
+                          text_color: gray
+                          id: label_button_http_5
+                          text: "HDMI In 1"
+                    on_short_click:
+                      then:
+                        - http_request.get:
+                            url: "http://optimalaudio.local/api/set?zone=1&source=6"
+                        - logger.log: "Sent HTTP request to set zone 1 source 5"
+          - container:
+              id: zone_input_6
+              grid_cell_x_align: stretch
+              grid_cell_y_align: stretch
+              grid_cell_row_pos: 3
+              grid_cell_column_pos: 3
+              grid_cell_row_span: 1
+              grid_cell_column_span: 1
+              widgets:
+                - button:
+                    id: button_http_6
+                    widgets:
+                      - label:
+                          align: center
+                          text_font: $text_font
+                          text_color: gray
+                          id: label_button_http_6
+                          text: "HDMI In 2"
+                    on_short_click:
+                      then:
+                        - http_request.get:
+                            url: "http://optimalaudio.local/api/set?zone=1&source=7"
+                        - logger.log: "Sent HTTP request to set zone 1 source 6"
+          - container:
+              id: music_level_container
+              grid_cell_x_align: stretch
+              grid_cell_y_align: stretch
+              grid_cell_row_pos: 1
+              grid_cell_column_pos: 0
+              grid_cell_row_span: 3
+              grid_cell_column_span: 1
+              widgets:
+                - obj:
+                    align: center
+                    width: 100%
+                    height: 100%
+                    radius: 20
+                    bg_color: $slider_back_color
+                    pad_all: 0
+                    border_width: 0
+                    shadow_opa: transp
+                    widgets:
+                      - slider:
+                          id: music_level_slider
+                          align: center
+                          min_value: 0
+                          max_value: 100
+                          value: 50
+                          width: 80%
+                          height: 100%
+                          radius: 16
+                          bg_color: $slider_back_color
+                          indicator:
+                            bg_color: $slider_colour
+                            radius: 0
+                          knob:
+                            bg_color: $slider_colour
+                            shadow_width: 0
+                            radius: 0px
+                            bg_opa: transp
+                          on_value:
+                            - lambda: |-
+                                int val = lv_slider_get_value(id(music_level_slider));
+                                oa_http::send_level("musiclevel", val);
+                - image:
+                    src: music_icon
+                    align: bottom_mid
+                    width: 48
+                    height: 48
+                    y: -28
+          - container:
+              id: sysmic_level_container
+              grid_cell_x_align: stretch
+              grid_cell_y_align: stretch
+              grid_cell_row_pos: 1
+              grid_cell_column_pos: 1
+              grid_cell_row_span: 3
+              grid_cell_column_span: 1
+              widgets:
+                - obj:
+                    align: center
+                    width: 100%
+                    height: 100%
+                    radius: 20
+                    bg_color: $slider_back_color
+                    pad_all: 0
+                    border_width: 0
+                    widgets:
+                      - slider:
+                          id: sysmic_level_slider
+                          align: center
+                          min_value: 0
+                          max_value: 100
+                          value: 50
+                          width: 80%
+                          height: 100%
+                          radius: 16
+                          bg_color: $slider_back_color
+                          indicator:
+                            bg_color: $slider_colour
+                            radius: 0
+                          knob:
+                            bg_color: white
+                            shadow_width: 0
+                            radius: 0px
+                            bg_opa: transp
+                          on_value:
+                            - lambda: |-
+                                int val = lv_slider_get_value(id(sysmic_level_slider));
+                                oa_http::send_level("sysmic1level", val);
+                - image:
+                    src: mic_icon
+                    align: bottom_mid
+                    width: 48
+                    height: 48
+                    y: -28
+# If you want to use other icons add them to the list here
+font:
+  # http://materialdesignicons.com/cdn/7.4.47/
+  - file: 'https://github.com/Templarian/MaterialDesign-Webfont/raw/v7.4.47/fonts/materialdesignicons-webfont.ttf'
+    id: mdi_icons_40
+    size: 40
+    bpp: 8
+    glyphs: [
+      $mdi_lightbulb,  # mdi-lightbulb
+      $mdi_ceiling_light,  # mdi-ceiling-light
+      $mdi_lamp,  # mdi-lamp
+      $mdi_floor_lamp,  # mdi-floor-lamp
+      $mdi_string_lights,  # mdi-string-lights
+      $mdi_track_light,  # mdi-track-light
+      $mdi_bulkhead_light,  # mdi-bulkhead_light
+      $mdi_led_strip,  # mdi-led-strip
+      $mdi_coach_lamp,  # mdi-coach-lamp
+      $mdi_ceiling_fan_light,  # mdi-ceiling-fan-light
+      $mdi_bed,  # mdi-bed
+      $mdi_white_balance_sunny,  # mdi-white-balance-sunny
+      $mdi_brightness_6,  # mdi-brightness-6
+      $mdi_home,
+      $mdi_information_box,
+      $mdi_music,
+      $mdi_microphone
+    ]
