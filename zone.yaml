@@ -60,7 +60,7 @@ lvgl:
               - button:
                   id: ${zone_prefix}_button_http
                   border_width: 0
-                  radius: 25
+                  radius: 12
                   widgets:
                     - label:
                         align: center
@@ -84,7 +84,7 @@ lvgl:
               - button:
                   id: ${zone_prefix}_button_http_2
                   border_width: 0
-                  radius: 25
+                  radius: 12
                   widgets:
                     - label:
                         align: center
@@ -108,7 +108,7 @@ lvgl:
               - button:
                   id: ${zone_prefix}_button_http_3
                   border_width: 0
-                  radius: 25
+                  radius: 12
                   widgets:
                     - label:
                         align: center
@@ -132,7 +132,7 @@ lvgl:
               - button:
                   id: ${zone_prefix}_button_http_4
                   border_width: 0
-                  radius: 25
+                  radius: 12
                   widgets:
                     - label:
                         align: center
@@ -156,7 +156,7 @@ lvgl:
               - button:
                   id: ${zone_prefix}_button_http_5
                   border_width: 0
-                  radius: 25
+                  radius: 12
                   widgets:
                     - label:
                         align: center
@@ -180,7 +180,7 @@ lvgl:
               - button:
                   id: ${zone_prefix}_button_http_6
                   border_width: 0
-                  radius: 25
+                  radius: 12
                   widgets:
                     - label:
                         align: center
@@ -205,7 +205,7 @@ lvgl:
                   align: center
                   width: 100%
                   height: 100%
-                  radius: 20
+                  radius: 12
                   bg_color: $slider_back_color
                   pad_all: 0
                   border_width: 0
@@ -253,7 +253,7 @@ lvgl:
                   align: center
                   width: 100%
                   height: 100%
-                  radius: 20
+                  radius: 12
                   bg_color: $slider_back_color
                   pad_all: 0
                   border_width: 0
