@@ -29,7 +29,6 @@ inline int fetch_source_value(int zone, int &out_value) {
   if (err == ESP_OK) {
     status = esp_http_client_fetch_headers(client);
     status = esp_http_client_get_status_code(client);
-    ESP_LOGD("zone_poll", "HTTP ok, status=%d url=%s", status, config.url);
     if (status == 200) {
       std::string body;
       char buf[256];
@@ -44,9 +43,7 @@ inline int fetch_source_value(int zone, int &out_value) {
           break;
         }
       }
-      ESP_LOGD("zone_poll", "HTTP read total=%d", total_read);
       if (!body.empty()) {
-        ESP_LOGD("zone_poll", "HTTP body: %s", body.c_str());
         auto doc = esphome::json::parse_json(body);
         if (!doc.isNull() && doc.is<JsonObject>()) {
           JsonObject root = doc.as<JsonObject>();
@@ -88,7 +85,6 @@ inline int fetch_param_value(int zone, const char *param, int &out_value) {
   if (err == ESP_OK) {
     status = esp_http_client_fetch_headers(client);
     status = esp_http_client_get_status_code(client);
-    ESP_LOGD("zone_poll", "HTTP ok, status=%d url=%s", status, config.url);
     if (status == 200) {
       std::string body;
       char buf[256];
@@ -103,9 +99,7 @@ inline int fetch_param_value(int zone, const char *param, int &out_value) {
           break;
         }
       }
-      ESP_LOGD("zone_poll", "HTTP read total=%d", total_read);
       if (!body.empty()) {
-        ESP_LOGD("zone_poll", "HTTP body: %s", body.c_str());
         auto doc = esphome::json::parse_json(body);
         if (!doc.isNull() && doc.is<JsonObject>()) {
           JsonObject root = doc.as<JsonObject>();
@@ -144,7 +138,6 @@ inline void send_level(int zone, const char *param, int value) {
   if (err == ESP_OK) {
     int status = esp_http_client_fetch_headers(client);
     status = esp_http_client_get_status_code(client);
-    ESP_LOGD("zone_level", "Sent %s -> status=%d", url, status);
   } else {
     ESP_LOGW("zone_level", "HTTP open failed: %d url=%s", err, url);
   }
