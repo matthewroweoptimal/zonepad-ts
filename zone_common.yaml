@@ -1,0 +1,206 @@
+substitutions:
+  slider_colour: "0xD2D2D2"
+  slider_back_color: "0x34394B"
+  slider_icon_color: "0x454851"
+  source1_label: "Input 1"
+  source1_value: "2"
+  source2_label: "Input 2"
+  source2_value: "3"
+  source3_label: "Input 3"
+  source3_value: "4"
+  source4_label: "Input 4"
+  source4_value: "5"
+  source5_label: "HDMI In 1"
+  source5_value: "6"
+  source6_label: "HDMI In 2"
+  source6_value: "7"
+  zone_audio_label: "Zone Audio"
+
+script:
+  - id: ${zone_prefix}_update_zone_source_buttons
+    parameters:
+      source_val: int
+    then:
+      # Clear existing outlines/labels, then highlight matching value
+      - lvgl.widget.update:
+          id: ${zone_prefix}_button_http
+          border_width: 0
+      - lvgl.widget.update:
+          id: ${zone_prefix}_label_button_http
+          text_color: $label_off_color
+      - lvgl.widget.update:
+          id: ${zone_prefix}_button_http_2
+          border_width: 0
+      - lvgl.widget.update:
+          id: ${zone_prefix}_label_button_http_2
+          text_color: $label_off_color
+      - lvgl.widget.update:
+          id: ${zone_prefix}_button_http_3
+          border_width: 0
+      - lvgl.widget.update:
+          id: ${zone_prefix}_label_button_http_3
+          text_color: $label_off_color
+      - lvgl.widget.update:
+          id: ${zone_prefix}_button_http_4
+          border_width: 0
+      - lvgl.widget.update:
+          id: ${zone_prefix}_label_button_http_4
+          text_color: $label_off_color
+      - lvgl.widget.update:
+          id: ${zone_prefix}_button_http_5
+          border_width: 0
+      - lvgl.widget.update:
+          id: ${zone_prefix}_label_button_http_5
+          text_color: $label_off_color
+      - lvgl.widget.update:
+          id: ${zone_prefix}_button_http_6
+          border_width: 0
+      - lvgl.widget.update:
+          id: ${zone_prefix}_label_button_http_6
+          text_color: $label_off_color
+      - if:
+          condition:
+            lambda: 'return source_val == 2;'
+          then:
+            - lvgl.widget.update:
+                id: ${zone_prefix}_button_http
+                border_color: $highlight_color
+                border_width: 2
+                border_opa: 100%
+                radius: 25px
+            - lvgl.widget.update:
+                id: ${zone_prefix}_label_button_http
+                text_color: $label_on_color
+          else:
+            - if:
+                condition:
+                  lambda: 'return source_val == 3;'
+                then:
+                  - lvgl.widget.update:
+                      id: ${zone_prefix}_button_http_2
+                      border_color: $highlight_color
+                      border_width: 2
+                      border_opa: 100%
+                      radius: 25px
+                  - lvgl.widget.update:
+                      id: ${zone_prefix}_label_button_http_2
+                      text_color: $label_on_color
+                else:
+                  - if:
+                      condition:
+                        lambda: 'return source_val == 4;'
+                      then:
+                        - lvgl.widget.update:
+                            id: ${zone_prefix}_button_http_3
+                            border_color: $highlight_color
+                            border_width: 2
+                            border_opa: 100%
+                            radius: 25px
+                        - lvgl.widget.update:
+                            id: ${zone_prefix}_label_button_http_3
+                            text_color: $label_on_color
+                      else:
+                        - if:
+                            condition:
+                              lambda: 'return source_val == 5;'
+                            then:
+                              - lvgl.widget.update:
+                                  id: ${zone_prefix}_button_http_4
+                                  border_color: $highlight_color
+                                  border_width: 2
+                                  border_opa: 100%
+                                  radius: 25px
+                              - lvgl.widget.update:
+                                  id: ${zone_prefix}_label_button_http_4
+                                  text_color: $label_on_color
+                            else:
+                              - if:
+                                  condition:
+                                    lambda: 'return source_val == 6;'
+                                  then:
+                                    - lvgl.widget.update:
+                                        id: ${zone_prefix}_button_http_5
+                                        border_color: $highlight_color
+                                        border_width: 2
+                                        border_opa: 100%
+                                        radius: 25px
+                                    - lvgl.widget.update:
+                                        id: ${zone_prefix}_label_button_http_5
+                                        text_color: $label_on_color
+                                  else:
+                                    - if:
+                                        condition:
+                                          lambda: 'return source_val == 7;'
+                                        then:
+                                          - lvgl.widget.update:
+                                              id: ${zone_prefix}_button_http_6
+                                              border_color: $highlight_color
+                                              border_width: 2
+                                              border_opa: 100%
+                                              radius: 25px
+                                          - lvgl.widget.update:
+                                              id: ${zone_prefix}_label_button_http_6
+                                              text_color: $label_on_color
+  - id: ${zone_prefix}_update_zone_levels
+    parameters:
+      music_val: int
+      sysmic_val: int
+    then:
+      - if:
+          condition:
+            lambda: 'return music_val >= 0;'
+          then:
+            - lvgl.slider.update:
+                id: ${zone_prefix}_music_level_slider
+                value: !lambda 'return music_val;'
+      - if:
+          condition:
+            lambda: 'return sysmic_val >= 0;'
+          then:
+            - lvgl.slider.update:
+                id: ${zone_prefix}_sysmic_level_slider
+                value: !lambda 'return sysmic_val;'
+  - id: ${zone_prefix}_poll_zone_source
+    then:
+      - if:
+          condition:
+            wifi.connected:
+          then:
+            - lambda: |-
+                int value = -1;
+                int status = oa_http::fetch_source_value(${zone_id}, value);
+                ESP_LOGD("zone_poll", "Status: %d, value: %d", status, value);
+                if (status == 200 && value > 0) {
+                  id(${zone_prefix}_update_zone_source_buttons).execute(value);
+                } else {
+                  ESP_LOGW("zone_poll", "Polling skipped highlight, status=%d value=%d", status, value);
+                }
+  - id: ${zone_prefix}_poll_zone_levels
+    then:
+      - if:
+          condition:
+            wifi.connected:
+          then:
+            - lambda: |-
+                int music_val = -1;
+                int mic_val = -1;
+                int status_music = oa_http::fetch_param_value(${zone_id}, "musiclevel", music_val);
+                int status_mic = oa_http::fetch_param_value(${zone_id}, "sysmic1level", mic_val);
+                ESP_LOGD("zone_level", "music status=%d val=%d, mic status=%d val=%d", status_music, music_val, status_mic, mic_val);
+                id(${zone_prefix}_update_zone_levels).execute(music_val, mic_val);
+
+image:
+  rgb565:
+    alpha_channel:
+      - file: 'assets/optimal_audio_home.svg'
+        id: optimal_audio_icon
+        resize: 74x74
+      - file: 'assets/music.svg'
+        id: music_icon
+        resize: 64x64
+      - file: 'assets/mic.svg'
+        id: mic_icon
+        resize: 64x64
+      - file: 'assets/optimal_audio_home_black.svg'
+        id: zone_audio_icon
+        resize: 48x48

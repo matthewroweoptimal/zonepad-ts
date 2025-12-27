@@ -6,11 +6,13 @@
 
 namespace oa_http {
 
-inline int fetch_source_value(int &out_value) {
+inline int fetch_source_value(int zone, int &out_value) {
   out_value = -1;
 
   esp_http_client_config_t config = {};
-  config.url = "http://optimalaudio.local/api/get?zone=1&source";
+  char url[96];
+  snprintf(url, sizeof(url), "http://optimalaudio.local/api/get?zone=%d&source", zone);
+  config.url = url;
   config.timeout_ms = 150;  // keep calls short to avoid WDT
   config.disable_auto_redirect = true;
   config.keep_alive_enable = false;
@@ -62,11 +64,11 @@ inline int fetch_source_value(int &out_value) {
   return status;
 }
 
-inline int fetch_param_value(const char *param, int &out_value) {
+inline int fetch_param_value(int zone, const char *param, int &out_value) {
   out_value = -1;
 
   char url[128];
-  snprintf(url, sizeof(url), "http://optimalaudio.local/api/get?zone=1&%s", param);
+  snprintf(url, sizeof(url), "http://optimalaudio.local/api/get?zone=%d&%s", zone, param);
 
   esp_http_client_config_t config = {};
   config.url = url;
@@ -121,9 +123,9 @@ inline int fetch_param_value(const char *param, int &out_value) {
   return status;
 }
 
-inline void send_level(const char *param, int value) {
+inline void send_level(int zone, const char *param, int value) {
   char url[128];
-  snprintf(url, sizeof(url), "http://optimalaudio.local/api/set?zone=1&%s=%d", param, value);
+  snprintf(url, sizeof(url), "http://optimalaudio.local/api/set?zone=%d&%s=%d", zone, param, value);
 
   esp_http_client_config_t config = {};
   config.url = url;

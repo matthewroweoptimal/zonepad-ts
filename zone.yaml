@@ -1,0 +1,301 @@
+substitutions:
+  zone_id: "1"
+  zone_name: "Zone 1"
+  zone_prefix: "zone1"
+
+lvgl:
+  pages:
+    - id: ${zone_prefix}_page
+      layout: 4x4
+      styles: page_style
+      <<: !include esphome-modular-lvgl-buttons/widgets/swipe_navigation.yaml
+      widgets:
+        - container:
+            id: ${zone_prefix}_logo
+            grid_cell_x_align: stretch
+            grid_cell_y_align: stretch
+            grid_cell_row_pos: 0
+            grid_cell_column_pos: 0
+            grid_cell_row_span: 1
+            grid_cell_column_span: 1
+            pad_all: 0
+            widgets:
+              - button:
+                  id: ${zone_prefix}_optimal_audio_button
+                  align: center
+                  width: 100%
+                  height: 100%
+                  bg_opa: TRANSP
+                  shadow_opa: TRANSP
+                  bg_image_tiled: false
+                  on_short_click:
+                    - lvgl.page.show: main_page
+                  widgets:
+                    - image:
+                        id: ${zone_prefix}_optimal_audio_image
+                        align: center
+                        y: -10
+                        src: optimal_audio_icon
+                        width: 80%
+                        height: 80%
+        - label:
+            text: "${zone_name}"
+            text_font: nunito_24
+            text_color: $slider_colour
+            grid_cell_row_pos: 0
+            grid_cell_column_pos: 1
+            grid_cell_column_span: 2
+            grid_cell_x_align: center
+            grid_cell_y_align: center
+        # Mirror main grid sizing for consistency
+        - container:
+            id: ${zone_prefix}_zone_input_1
+            grid_cell_x_align: stretch
+            grid_cell_y_align: stretch
+            grid_cell_row_pos: 1
+            grid_cell_column_pos: 2
+            grid_cell_row_span: 1
+            grid_cell_column_span: 1
+            widgets:
+              - button:
+                  id: ${zone_prefix}_button_http
+                  border_width: 0
+                  radius: 25
+                  widgets:
+                    - label:
+                        align: center
+                        text_font: $text_font
+                        text_color: gray
+                        id: ${zone_prefix}_label_button_http
+                        text: "${source1_label}"
+                  on_short_click:
+                    then:
+                      - http_request.get:
+                          url: "http://optimalaudio.local/api/set?zone=${zone_id}&source=${source1_value}"
+        - container:
+            id: ${zone_prefix}_zone_input_2
+            grid_cell_x_align: stretch
+            grid_cell_y_align: stretch
+            grid_cell_row_pos: 2
+            grid_cell_column_pos: 2
+            grid_cell_row_span: 1
+            grid_cell_column_span: 1
+            widgets:
+              - button:
+                  id: ${zone_prefix}_button_http_2
+                  border_width: 0
+                  radius: 25
+                  widgets:
+                    - label:
+                        align: center
+                        text_font: $text_font
+                        text_color: gray
+                        id: ${zone_prefix}_label_button_http_2
+                        text: "${source2_label}"
+                  on_short_click:
+                    then:
+                      - http_request.get:
+                          url: "http://optimalaudio.local/api/set?zone=${zone_id}&source=${source2_value}"
+        - container:
+            id: ${zone_prefix}_zone_input_3
+            grid_cell_x_align: stretch
+            grid_cell_y_align: stretch
+            grid_cell_row_pos: 3
+            grid_cell_column_pos: 2
+            grid_cell_row_span: 1
+            grid_cell_column_span: 1
+            widgets:
+              - button:
+                  id: ${zone_prefix}_button_http_3
+                  border_width: 0
+                  radius: 25
+                  widgets:
+                    - label:
+                        align: center
+                        text_font: $text_font
+                        text_color: gray
+                        id: ${zone_prefix}_label_button_http_3
+                        text: "${source3_label}"
+                  on_short_click:
+                    then:
+                      - http_request.get:
+                          url: "http://optimalaudio.local/api/set?zone=${zone_id}&source=${source3_value}"
+        - container:
+            id: ${zone_prefix}_zone_input_4
+            grid_cell_x_align: stretch
+            grid_cell_y_align: stretch
+            grid_cell_row_pos: 1
+            grid_cell_column_pos: 3
+            grid_cell_row_span: 1
+            grid_cell_column_span: 1
+            widgets:
+              - button:
+                  id: ${zone_prefix}_button_http_4
+                  border_width: 0
+                  radius: 25
+                  widgets:
+                    - label:
+                        align: center
+                        text_font: $text_font
+                        text_color: gray
+                        id: ${zone_prefix}_label_button_http_4
+                        text: "${source4_label}"
+                  on_short_click:
+                    then:
+                      - http_request.get:
+                          url: "http://optimalaudio.local/api/set?zone=${zone_id}&source=${source4_value}"
+        - container:
+            id: ${zone_prefix}_zone_input_5
+            grid_cell_x_align: stretch
+            grid_cell_y_align: stretch
+            grid_cell_row_pos: 2
+            grid_cell_column_pos: 3
+            grid_cell_row_span: 1
+            grid_cell_column_span: 1
+            widgets:
+              - button:
+                  id: ${zone_prefix}_button_http_5
+                  border_width: 0
+                  radius: 25
+                  widgets:
+                    - label:
+                        align: center
+                        text_font: $text_font
+                        text_color: gray
+                        id: ${zone_prefix}_label_button_http_5
+                        text: "${source5_label}"
+                  on_short_click:
+                    then:
+                      - http_request.get:
+                          url: "http://optimalaudio.local/api/set?zone=${zone_id}&source=${source5_value}"
+        - container:
+            id: ${zone_prefix}_zone_input_6
+            grid_cell_x_align: stretch
+            grid_cell_y_align: stretch
+            grid_cell_row_pos: 3
+            grid_cell_column_pos: 3
+            grid_cell_row_span: 1
+            grid_cell_column_span: 1
+            widgets:
+              - button:
+                  id: ${zone_prefix}_button_http_6
+                  border_width: 0
+                  radius: 25
+                  widgets:
+                    - label:
+                        align: center
+                        text_font: $text_font
+                        text_color: gray
+                        id: ${zone_prefix}_label_button_http_6
+                        text: "${source6_label}"
+                  on_short_click:
+                    then:
+                      - http_request.get:
+                          url: "http://optimalaudio.local/api/set?zone=${zone_id}&source=${source6_value}"
+        - container:
+            id: ${zone_prefix}_music_level_container
+            grid_cell_x_align: stretch
+            grid_cell_y_align: stretch
+            grid_cell_row_pos: 1
+            grid_cell_column_pos: 0
+            grid_cell_row_span: 3
+            grid_cell_column_span: 1
+            widgets:
+              - obj:
+                  align: center
+                  width: 100%
+                  height: 100%
+                  radius: 20
+                  bg_color: $slider_back_color
+                  pad_all: 0
+                  border_width: 0
+                  shadow_opa: transp
+                  widgets:
+                    - slider:
+                        id: ${zone_prefix}_music_level_slider
+                        align: center
+                        min_value: 0
+                        max_value: 100
+                        value: 50
+                        width: 80%
+                        height: 100%
+                        radius: 16
+                        bg_color: $slider_back_color
+                        bg_opa: 100%
+                        indicator:
+                          bg_color: $slider_colour
+                          radius: 0
+                        knob:
+                          bg_color: $slider_colour
+                          shadow_width: 0
+                          radius: 0px
+                          bg_opa: transp
+                        on_value:
+                          - lambda: |-
+                              int val = lv_slider_get_value(id(${zone_prefix}_music_level_slider));
+                              oa_http::send_level(${zone_id}, "musiclevel", val);
+              - image:
+                  src: music_icon
+                  align: bottom_mid
+                  width: 48
+                  height: 48
+                  y: -28
+        - container:
+            id: ${zone_prefix}_sysmic_level_container
+            grid_cell_x_align: stretch
+            grid_cell_y_align: stretch
+            grid_cell_row_pos: 1
+            grid_cell_column_pos: 1
+            grid_cell_row_span: 3
+            grid_cell_column_span: 1
+            widgets:
+              - obj:
+                  align: center
+                  width: 100%
+                  height: 100%
+                  radius: 20
+                  bg_color: $slider_back_color
+                  pad_all: 0
+                  border_width: 0
+                  widgets:
+                    - slider:
+                        id: ${zone_prefix}_sysmic_level_slider
+                        align: center
+                        min_value: 0
+                        max_value: 100
+                        value: 50
+                        width: 80%
+                        height: 100%
+                        radius: 16
+                        bg_color: $slider_back_color
+                        bg_opa: 100%
+                        indicator:
+                          bg_color: $slider_colour
+                          radius: 0
+                        knob:
+                          bg_color: white
+                          shadow_width: 0
+                          radius: 0px
+                          bg_opa: transp
+                        on_value:
+                          - lambda: |-
+                              int val = lv_slider_get_value(id(${zone_prefix}_sysmic_level_slider));
+                              oa_http::send_level(${zone_id}, "sysmic1level", val);
+              - image:
+                  src: mic_icon
+                  align: bottom_mid
+                  width: 48
+                  height: 48
+                  y: -28
+
+interval:
+  - interval: 500ms
+    then:
+      - if:
+          condition:
+            lambda: |-
+              auto *cur = lv_scr_act();
+              return esphome::network::is_connected() && cur != nullptr && cur == id(${zone_prefix}_page).obj;
+          then:
+            - script.execute: ${zone_prefix}_poll_zone_source
+            - script.execute: ${zone_prefix}_poll_zone_levels
