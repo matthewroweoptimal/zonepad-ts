@@ -1,6 +1,7 @@
-# Zonepad TS
+# ZonePad TS
 
 This repository contains an ESPHome + LVGL configuration for a Guition ESP32-S3-4848S040 (480x480) touch display. It builds a zone control UI (zone levels, source selection, mic/music sliders) with shared assets and HTTP helpers to talk to an Optimal Audio Zone processor backend.
+It is not formally supported by Optimal Audio, but uses public APIs and is very simple to adapt.
 
 ## Description
 - This code adds a “Zone Audio” button to the example main page that navigates to a page of Zone audio controls for Zone 1.
